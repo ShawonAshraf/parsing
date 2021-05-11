@@ -1,0 +1,26 @@
+Internal grammar representation:
+ {'S': [['VP', 'NP']], 'NP': [['N', 'DET']], 'VP': [['V']], 'DET': [['the'], ['an'], ['my'], ['most']], 'N': [['elephant'], ['elephants'], ['mouse'], ['mice']], 'V': [['sneezed'], ['giggled'], ['trumpeted']]}
+----------------------------------------------------------------
+
+parsing  ['the', 'elephant', 'sneezed'] ...
+           ['S']                                             ['the', 'elephant', 'sneezed']
+ >expand:	S	->	['VP', 'NP']
+           ['VP', 'NP']                                      ['the', 'elephant', 'sneezed']
+ >expand:	NP	->	['N', 'DET']
+           ['VP', 'N', 'DET']                                ['the', 'elephant', 'sneezed']
+ >expand:	DET	->	['the']
+           ['VP', 'N', 'the']                                ['the', 'elephant', 'sneezed']
+ >match:	the	->	the
+           ['VP', 'N']                                              ['elephant', 'sneezed']
+ >expand:	N	->	['elephant']
+           ['VP', 'elephant']                                       ['elephant', 'sneezed']
+ >match:	elephant	->	elephant
+           ['VP']                                                               ['sneezed']
+ >expand:	VP	->	['V']
+           ['V']                                                                ['sneezed']
+ >expand:	V	->	['sneezed']
+           ['sneezed']                                                          ['sneezed']
+ >match:	sneezed	->	sneezed
+           []                                                                            []
+success!
+

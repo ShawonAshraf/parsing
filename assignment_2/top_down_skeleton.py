@@ -9,7 +9,7 @@ import readline
 trace = True  # set this to False if you don't want to see intermediate steps
 
 # Boolean variable for running parser interactively on user input or on pre-specified input
-interactive = True  # False
+interactive = False  # False
 
 # internal format of cfg production rules with reversed right-hand sides (!)
 grammar = {'S': [['VP', 'NP']],
@@ -39,29 +39,40 @@ def parse(grammar, tokens):
         print("parsing ", tokens, "...")
 
     # initialize data structures:
-    stack = TBD
-    inbuffer = TBD
+    stack = ["S"]  # -> S is the start symbol
+    inbuffer = tokens  # -> buffer is the tokens from the input string
 
     # main loop:
-    while inbuffer:
+    while len(inbuffer) > 0:
         if trace:
             print("           {:<40}{:>40}".format(str(stack), str(inbuffer)))
 
         # expand
-        if TBD:
-            TBD
+        #
+        # -> look for the symbol at the top of the stack in the grammar
+        stack_top = stack[-1]
+        # -> don't match with input!
+        if stack_top in grammar and stack_top != inbuffer[0]:
+            # ->
             if trace:
-                print(" >expand: ")
+                print(f" >expand:\t{stack_top}\t->\t{grammar[stack_top][0]}")
 
-            stack = TBD
-            inbuffer = TBD
+            # -> pop
+            stack.pop()
+
+            # add the expanded symbols in stack
+            stack.extend(grammar[stack_top][0])
+            # inbuffer = TBD
 
         # match
-        elif TBD:
+        # stack_top matches with input symbol, consume
+        elif stack_top == inbuffer[0]:
             if trace:
-                print(" >match:  ")
-            stack = TBD
-            inbuffer = TBD
+                print(f" >match:\t{stack_top}\t->\t{inbuffer[0]}")
+
+            # pop from stack and inbuffer
+            stack.pop()
+            inbuffer = inbuffer[1:]
 
         # no match:
         else:
@@ -73,7 +84,7 @@ def parse(grammar, tokens):
         print("           {:<40}{:>40}".format(str(stack), str(inbuffer)))
 
     # termination
-    if TBD:
+    if len(stack) == 0 and len(inbuffer) == 0:
         print("success!")
     else:
         print("failure!")
@@ -102,8 +113,8 @@ def demo(grammar):
     else:
         tokens = "the elephant sneezed".split()
         parse(grammar, tokens)
-        tokens = "my mouse giggled".split()
-        parse(grammar, tokens)
+        # tokens = "my mouse giggled".split()
+        # parse(grammar, tokens)
 
 
 if __name__ == "__main__":

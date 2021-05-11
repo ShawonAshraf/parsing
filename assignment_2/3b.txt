@@ -1,0 +1,26 @@
+Internal grammar representation:
+ {'S': [['VP', 'NP']], 'NP': [['N', 'DET']], 'VP': [['V']], 'DET': [['my'], ['an'], ['the'], ['most']], 'N': [['mouse'], ['elephants'], ['elephant'], ['mice']], 'V': [['giggled'], ['sneezed'], ['trumpeted']]}
+----------------------------------------------------------------
+
+parsing  ['my', 'mouse', 'giggled'] ...
+           ['S']                                                 ['my', 'mouse', 'giggled']
+ >expand:	S	->	['VP', 'NP']
+           ['VP', 'NP']                                          ['my', 'mouse', 'giggled']
+ >expand:	NP	->	['N', 'DET']
+           ['VP', 'N', 'DET']                                    ['my', 'mouse', 'giggled']
+ >expand:	DET	->	['my']
+           ['VP', 'N', 'my']                                     ['my', 'mouse', 'giggled']
+ >match:	my	->	my
+           ['VP', 'N']                                                 ['mouse', 'giggled']
+ >expand:	N	->	['mouse']
+           ['VP', 'mouse']                                             ['mouse', 'giggled']
+ >match:	mouse	->	mouse
+           ['VP']                                                               ['giggled']
+ >expand:	VP	->	['V']
+           ['V']                                                                ['giggled']
+ >expand:	V	->	['giggled']
+           ['giggled']                                                          ['giggled']
+ >match:	giggled	->	giggled
+           []                                                                            []
+success!
+

@@ -5,6 +5,9 @@
 # enables input history in interactive mode
 import readline
 
+# CFG
+from nltk import CFG
+
 # Boolean variable for switching tracing info on and off
 trace = True  # set this to False if you don't want to see intermediate steps
 
@@ -28,6 +31,37 @@ DET -> 'the' | 'an' | 'my' | 'most'
 N -> 'elephant' | 'elephants' | 'mouse' | 'mice'
 V -> 'sneezed' | 'giggled' | 'trumpeted'
 """
+
+
+# load grammar from nltk format string
+def load_grammar(grammar_str):
+    cfg = CFG.fromstring(grammar_str)
+    grammar = {}
+
+    for production in cfg.productions():
+        production_str = str(production)
+
+        lhs, rhs = production_str.split("->")
+        lhs = lhs.strip()
+        rhs = rhs.strip()
+
+        # split
+        rhs = rhs.split(" ")
+        # reverse rhs
+        rhs = rhs[::-1]
+
+        # remove '' from terminals
+        for i in range(len(rhs)):
+            rhs[i] = rhs[i].replace("'", "")
+
+        # lhs -> list(rhs) mapping
+        # check in lhs is in keys
+        if lhs in grammar.keys():
+            grammar[lhs].append(rhs)
+        else:
+            grammar[lhs] = [rhs]
+
+    return grammar
 
 
 # main procedure:
@@ -113,12 +147,12 @@ def demo(grammar):
     else:
         tokens = "the elephant sneezed".split()
         parse(grammar, tokens)
-        # tokens = "my mouse giggled".split()
-        # parse(grammar, tokens)
+        tokens = "my mouse giggled".split()
+        parse(grammar, tokens)
 
 
 if __name__ == "__main__":
     # Later we will take the grammar in some other format, so we will have
     # to convert it to our internal dict format:
-    # grammar = load_grammar(grammar_string)
+    grammar = load_grammar(grammar_string)
     demo(grammar)

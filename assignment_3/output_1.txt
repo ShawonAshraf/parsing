@@ -1,0 +1,142 @@
+Internal grammar representation:
+ {'S': [['VP', 'NP']], 'NP': [['N', 'DET']], 'VP': [['V']], 'DET': [['the'], ['an'], ['my'], ['most']], 'N': [['elephant'], ['elephants'], ['mouse'], ['mice']], 'V': [['sneezed'], ['giggled'], ['trumpeted']]}
+----------------------------------------------------------------
+
+parsing  ['the', 'elephant', 'sneezed'] ...
+           ['S']                                             ['the', 'elephant', 'sneezed']
+ >expand:	 S 	 ->	 ['VP', 'NP']
+           ['VP', 'NP']                                      ['the', 'elephant', 'sneezed']
+ >expand:	 NP 	 ->	 ['N', 'DET']
+           ['VP', 'N', 'DET']                                ['the', 'elephant', 'sneezed']
+ >expand:	 DET 	 ->	 ['the']
+ >expand:	 DET 	 ->	 ['an']
+ >expand:	 DET 	 ->	 ['my']
+ >expand:	 DET 	 ->	 ['most']
+           ['VP', 'N', 'most']                               ['the', 'elephant', 'sneezed']
+ >backtracking (no match for terminal)
+           ['VP', 'N', 'my']                                 ['the', 'elephant', 'sneezed']
+ >backtracking (no match for terminal)
+           ['VP', 'N', 'an']                                 ['the', 'elephant', 'sneezed']
+ >backtracking (no match for terminal)
+           ['VP', 'N', 'the']                                ['the', 'elephant', 'sneezed']
+ >match:	 the
+           ['VP', 'N']                                              ['elephant', 'sneezed']
+ >expand:	 N 	 ->	 ['elephant']
+ >expand:	 N 	 ->	 ['elephants']
+ >expand:	 N 	 ->	 ['mouse']
+ >expand:	 N 	 ->	 ['mice']
+           ['VP', 'mice']                                           ['elephant', 'sneezed']
+ >backtracking (no match for terminal)
+           ['VP', 'mouse']                                          ['elephant', 'sneezed']
+ >backtracking (no match for terminal)
+           ['VP', 'elephants']                                      ['elephant', 'sneezed']
+ >backtracking (no match for terminal)
+           ['VP', 'elephant']                                       ['elephant', 'sneezed']
+ >match:	 elephant
+           ['VP']                                                               ['sneezed']
+ >expand:	 VP 	 ->	 ['V']
+           ['V']                                                                ['sneezed']
+ >expand:	 V 	 ->	 ['sneezed']
+ >expand:	 V 	 ->	 ['giggled']
+ >expand:	 V 	 ->	 ['trumpeted']
+           ['trumpeted']                                                        ['sneezed']
+ >backtracking (no match for terminal)
+           ['giggled']                                                          ['sneezed']
+ >backtracking (no match for terminal)
+           ['sneezed']                                                          ['sneezed']
+ >match:	 sneezed
+           []                                                                            []
+ >success!
+1 -> solutions for parsing
+parsing  ['my', 'mouse', 'giggled'] ...
+           ['S']                                                 ['my', 'mouse', 'giggled']
+ >expand:	 S 	 ->	 ['VP', 'NP']
+           ['VP', 'NP']                                          ['my', 'mouse', 'giggled']
+ >expand:	 NP 	 ->	 ['N', 'DET']
+           ['VP', 'N', 'DET']                                    ['my', 'mouse', 'giggled']
+ >expand:	 DET 	 ->	 ['the']
+ >expand:	 DET 	 ->	 ['an']
+ >expand:	 DET 	 ->	 ['my']
+ >expand:	 DET 	 ->	 ['most']
+           ['VP', 'N', 'most']                                   ['my', 'mouse', 'giggled']
+ >backtracking (no match for terminal)
+           ['VP', 'N', 'my']                                     ['my', 'mouse', 'giggled']
+ >match:	 my
+           ['VP', 'N']                                                 ['mouse', 'giggled']
+ >expand:	 N 	 ->	 ['elephant']
+ >expand:	 N 	 ->	 ['elephants']
+ >expand:	 N 	 ->	 ['mouse']
+ >expand:	 N 	 ->	 ['mice']
+           ['VP', 'mice']                                              ['mouse', 'giggled']
+ >backtracking (no match for terminal)
+           ['VP', 'mouse']                                             ['mouse', 'giggled']
+ >match:	 mouse
+           ['VP']                                                               ['giggled']
+ >expand:	 VP 	 ->	 ['V']
+           ['V']                                                                ['giggled']
+ >expand:	 V 	 ->	 ['sneezed']
+ >expand:	 V 	 ->	 ['giggled']
+ >expand:	 V 	 ->	 ['trumpeted']
+           ['trumpeted']                                                        ['giggled']
+ >backtracking (no match for terminal)
+           ['giggled']                                                          ['giggled']
+ >match:	 giggled
+           []                                                                            []
+ >success!
+           ['sneezed']                                                          ['giggled']
+ >backtracking (no match for terminal)
+           ['VP', 'elephants']                                         ['mouse', 'giggled']
+ >backtracking (no match for terminal)
+           ['VP', 'elephant']                                          ['mouse', 'giggled']
+ >backtracking (no match for terminal)
+           ['VP', 'N', 'an']                                     ['my', 'mouse', 'giggled']
+ >backtracking (no match for terminal)
+           ['VP', 'N', 'the']                                    ['my', 'mouse', 'giggled']
+ >backtracking (no match for terminal)
+1 -> solutions for parsing
+parsing  ['most', 'elephants', 'trumpeted'] ...
+           ['S']                                         ['most', 'elephants', 'trumpeted']
+ >expand:	 S 	 ->	 ['VP', 'NP']
+           ['VP', 'NP']                                  ['most', 'elephants', 'trumpeted']
+ >expand:	 NP 	 ->	 ['N', 'DET']
+           ['VP', 'N', 'DET']                            ['most', 'elephants', 'trumpeted']
+ >expand:	 DET 	 ->	 ['the']
+ >expand:	 DET 	 ->	 ['an']
+ >expand:	 DET 	 ->	 ['my']
+ >expand:	 DET 	 ->	 ['most']
+           ['VP', 'N', 'most']                           ['most', 'elephants', 'trumpeted']
+ >match:	 most
+           ['VP', 'N']                                           ['elephants', 'trumpeted']
+ >expand:	 N 	 ->	 ['elephant']
+ >expand:	 N 	 ->	 ['elephants']
+ >expand:	 N 	 ->	 ['mouse']
+ >expand:	 N 	 ->	 ['mice']
+           ['VP', 'mice']                                        ['elephants', 'trumpeted']
+ >backtracking (no match for terminal)
+           ['VP', 'mouse']                                       ['elephants', 'trumpeted']
+ >backtracking (no match for terminal)
+           ['VP', 'elephants']                                   ['elephants', 'trumpeted']
+ >match:	 elephants
+           ['VP']                                                             ['trumpeted']
+ >expand:	 VP 	 ->	 ['V']
+           ['V']                                                              ['trumpeted']
+ >expand:	 V 	 ->	 ['sneezed']
+ >expand:	 V 	 ->	 ['giggled']
+ >expand:	 V 	 ->	 ['trumpeted']
+           ['trumpeted']                                                      ['trumpeted']
+ >match:	 trumpeted
+           []                                                                            []
+ >success!
+           ['giggled']                                                        ['trumpeted']
+ >backtracking (no match for terminal)
+           ['sneezed']                                                        ['trumpeted']
+ >backtracking (no match for terminal)
+           ['VP', 'elephant']                                    ['elephants', 'trumpeted']
+ >backtracking (no match for terminal)
+           ['VP', 'N', 'my']                             ['most', 'elephants', 'trumpeted']
+ >backtracking (no match for terminal)
+           ['VP', 'N', 'an']                             ['most', 'elephants', 'trumpeted']
+ >backtracking (no match for terminal)
+           ['VP', 'N', 'the']                            ['most', 'elephants', 'trumpeted']
+ >backtracking (no match for terminal)
+1 -> solutions for parsing

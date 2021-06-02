@@ -1,4 +1,4 @@
-# top_down_skeleton.py
+# task1.py
 # Jonas Kuhn, University of Stuttgart, 2021
 # course "Parsing"
 

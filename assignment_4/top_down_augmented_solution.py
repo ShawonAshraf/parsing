@@ -275,7 +275,7 @@ def demo(grammar, test_sentences=[]):
         for test_sentence in test_sentences:
             tokens = test_sentence.split(" ")
             result = parse_backtrack(grammar, tokens)
-            build_tree(result)
+            # build_tree(result)
 
 
 if __name__ == "__main__":

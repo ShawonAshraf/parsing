@@ -65,6 +65,7 @@ def load_grammar(grammar):
 
 
 def bottom_up_parse(G, tokens):
+    step_counter = 0
     if trace:
         print("parsing ", tokens, "...")
 
@@ -88,6 +89,7 @@ def bottom_up_parse(G, tokens):
             # again: we need to do nothing; next agenda item will be considered
 
         else:
+            step_counter += 1
             # shift
             if len(inbuffer) > 0:
                 if trace:
@@ -116,7 +118,8 @@ def bottom_up_parse(G, tokens):
                     inbuffer_temp = list(inbuffer)
                     agenda += [(stack_temp, inbuffer_temp, deriv_temp)]
 
-    if trace: print(len(parses), ' solutions')
+    if trace:
+        print(len(parses), ' solutions')
 
     sol = 0
     for deriv in parses:
@@ -125,6 +128,7 @@ def bottom_up_parse(G, tokens):
         print(deriv)
     print(f"total solutions : {sol}")
 
+    return step_counter
 
 
 def demo(grammar, test_sentences=[]):

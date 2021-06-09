@@ -1,0 +1,1235 @@
+Internal grammar representation:
+ {('NP', 'VP'): ['S'], ('DET', 'N'): ['NP'], ('DET', 'N', 'PP'): ['NP'], ('I',): ['NP'], ('V',): ['VP'], ('V', 'NP'): ['VP'], ('V', 'NP', 'PP'): ['VP'], ('P', 'NP'): ['PP'], ('the',): ['DET'], ('an',): ['DET'], ('my',): ['DET'], ('most',): ['DET'], ('in',): ['P'], ('elephant',): ['N'], ('elephants',): ['N'], ('mouse',): ['N'], ('mice',): ['N'], ('pajamas',): ['N'], ('sneezed',): ['V'], ('giggled',): ['V'], ('trumpeted',): ['V'], ('saw',): ['V'], ('shot',): ['V']}
+----------------------------------------------------------------
+
+parsing  ['I', 'shot', 'an', 'elephant', 'in', 'my', 'pajamas'] ...
+           []                                      ['I', 'shot', 'an', 'elephant', 'in', 'my', 'pajamas']
+ >shift:   I
+           ['I']                                   ['shot', 'an', 'elephant', 'in', 'my', 'pajamas']
+ >shift:   shot
+           ['I']                                   ['shot', 'an', 'elephant', 'in', 'my', 'pajamas']
+ >reduce:  ['I']  -R->  ['NP']
+           ['NP']                                  ['shot', 'an', 'elephant', 'in', 'my', 'pajamas']
+ >shift:   shot
+           ['NP', 'shot']                          ['an', 'elephant', 'in', 'my', 'pajamas']
+ >shift:   an
+           ['NP', 'shot']                          ['an', 'elephant', 'in', 'my', 'pajamas']
+ >reduce:  ['shot']  -R->  ['V']
+           ['NP', 'V']                             ['an', 'elephant', 'in', 'my', 'pajamas']
+ >shift:   an
+           ['NP', 'V']                             ['an', 'elephant', 'in', 'my', 'pajamas']
+ >reduce:  ['V']  -R->  ['VP']
+           ['NP', 'VP']                            ['an', 'elephant', 'in', 'my', 'pajamas']
+ >shift:   an
+           ['NP', 'VP']                            ['an', 'elephant', 'in', 'my', 'pajamas']
+ >reduce:  ['NP', 'VP']  -R->  ['S']
+ >backtracking (stack or buffer was empty)
+           ['NP', 'VP', 'an']                           ['elephant', 'in', 'my', 'pajamas']
+ >shift:   elephant
+           ['NP', 'VP', 'an']                           ['elephant', 'in', 'my', 'pajamas']
+ >reduce:  ['an']  -R->  ['DET']
+           ['NP', 'VP', 'DET']                          ['elephant', 'in', 'my', 'pajamas']
+ >shift:   elephant
+           ['NP', 'VP', 'DET', 'elephant']                          ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'VP', 'DET', 'elephant']                          ['in', 'my', 'pajamas']
+ >reduce:  ['elephant']  -R->  ['N']
+           ['NP', 'VP', 'DET', 'N']                                 ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'VP', 'DET', 'N']                                 ['in', 'my', 'pajamas']
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'NP']                                       ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'VP', 'NP', 'in']                                       ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'VP', 'NP', 'in']                                       ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'VP', 'NP', 'P']                                        ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'VP', 'NP', 'P', 'my']                                        ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'NP', 'P', 'my']                                        ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'VP', 'NP', 'P', 'DET']                                       ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'NP', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'NP', 'P', 'DET', 'N']                                           []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'NP', 'P', 'NP']                                                 []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'VP', 'NP', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'NP', 'in', 'my']                                       ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'NP', 'in', 'my']                                       ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'VP', 'NP', 'in', 'DET']                                      ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'NP', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'NP', 'in', 'DET', 'N']                                          []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'NP', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'DET', 'N', 'in']                                 ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'VP', 'DET', 'N', 'in']                                 ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'VP', 'DET', 'N', 'P']                                  ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'VP', 'DET', 'N', 'P', 'my']                                  ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'DET', 'N', 'P', 'my']                                  ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'VP', 'DET', 'N', 'P', 'DET']                                 ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'DET', 'N', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'DET', 'N', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'DET', 'N', 'P', 'NP']                                           []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'VP', 'DET', 'N', 'PP']                                                []
+ >reduce:  ['DET', 'N', 'PP']  -R->  ['NP']
+           ['NP', 'VP', 'DET', 'N', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'DET', 'N', 'in', 'my']                                 ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'DET', 'N', 'in', 'my']                                 ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'VP', 'DET', 'N', 'in', 'DET']                                ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'DET', 'N', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'DET', 'N', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'DET', 'N', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'DET', 'elephant', 'in']                          ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'VP', 'DET', 'elephant', 'in']                          ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'VP', 'DET', 'elephant', 'P']                           ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'VP', 'DET', 'elephant', 'P', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'DET', 'elephant', 'P', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'VP', 'DET', 'elephant', 'P', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'DET', 'elephant', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'DET', 'elephant', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'DET', 'elephant', 'P', 'NP']                                      []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'VP', 'DET', 'elephant', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'DET', 'elephant', 'in', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'DET', 'elephant', 'in', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'VP', 'DET', 'elephant', 'in', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'DET', 'elephant', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'DET', 'elephant', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'DET', 'elephant', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'an', 'elephant']                           ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'VP', 'an', 'elephant']                           ['in', 'my', 'pajamas']
+ >reduce:  ['elephant']  -R->  ['N']
+           ['NP', 'VP', 'an', 'N']                                  ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'VP', 'an', 'N', 'in']                                  ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'VP', 'an', 'N', 'in']                                  ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'VP', 'an', 'N', 'P']                                   ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'VP', 'an', 'N', 'P', 'my']                                   ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'an', 'N', 'P', 'my']                                   ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'VP', 'an', 'N', 'P', 'DET']                                  ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'an', 'N', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'an', 'N', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'an', 'N', 'P', 'NP']                                            []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'VP', 'an', 'N', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'an', 'N', 'in', 'my']                                  ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'an', 'N', 'in', 'my']                                  ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'VP', 'an', 'N', 'in', 'DET']                                 ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'an', 'N', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'an', 'N', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'an', 'N', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'an', 'elephant', 'in']                           ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'VP', 'an', 'elephant', 'in']                           ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'VP', 'an', 'elephant', 'P']                            ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'VP', 'an', 'elephant', 'P', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'an', 'elephant', 'P', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'VP', 'an', 'elephant', 'P', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'an', 'elephant', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'an', 'elephant', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'an', 'elephant', 'P', 'NP']                                      []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'VP', 'an', 'elephant', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'an', 'elephant', 'in', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'an', 'elephant', 'in', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'VP', 'an', 'elephant', 'in', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'an', 'elephant', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'an', 'elephant', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'an', 'elephant', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'an']                            ['elephant', 'in', 'my', 'pajamas']
+ >shift:   elephant
+           ['NP', 'V', 'an']                            ['elephant', 'in', 'my', 'pajamas']
+ >reduce:  ['an']  -R->  ['DET']
+           ['NP', 'V', 'DET']                           ['elephant', 'in', 'my', 'pajamas']
+ >shift:   elephant
+           ['NP', 'V', 'DET', 'elephant']                           ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'V', 'DET', 'elephant']                           ['in', 'my', 'pajamas']
+ >reduce:  ['elephant']  -R->  ['N']
+           ['NP', 'V', 'DET', 'N']                                  ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'V', 'DET', 'N']                                  ['in', 'my', 'pajamas']
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'V', 'NP']                                        ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'V', 'NP']                                        ['in', 'my', 'pajamas']
+ >reduce:  ['V', 'NP']  -R->  ['VP']
+           ['NP', 'VP']                                             ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'VP']                                             ['in', 'my', 'pajamas']
+ >reduce:  ['NP', 'VP']  -R->  ['S']
+ >backtracking (stack or buffer was empty)
+           ['NP', 'VP', 'in']                                             ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'VP', 'in']                                             ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'VP', 'P']                                              ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'VP', 'P', 'my']                                              ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'P', 'my']                                              ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'VP', 'P', 'DET']                                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'P', 'DET', 'pajamas']                                           []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'P', 'DET', 'N']                                                 []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'P', 'NP']                                                       []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'VP', 'P', 'my', 'pajamas']                                            []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'in', 'my']                                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'in', 'my']                                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'VP', 'in', 'DET']                                            ['pajamas']
+ >shift:   pajamas
+           ['NP', 'VP', 'in', 'DET', 'pajamas']                                          []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'VP', 'in', 'DET', 'N']                                                []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'VP', 'in', 'my', 'pajamas']                                           []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'NP', 'in']                                        ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'V', 'NP', 'in']                                        ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'V', 'NP', 'P']                                         ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'V', 'NP', 'P', 'my']                                         ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'NP', 'P', 'my']                                         ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'V', 'NP', 'P', 'DET']                                        ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'NP', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'NP', 'P', 'DET', 'N']                                            []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'V', 'NP', 'P', 'NP']                                                  []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'V', 'NP', 'PP']                                                       []
+ >reduce:  ['V', 'NP', 'PP']  -R->  ['VP']
+           ['NP', 'VP']                                                                  []
+ >reduce:  ['NP', 'VP']  -R->  ['S']
+ >accept!
+           ['NP', 'V', 'NP', 'P', 'my', 'pajamas']                                       []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'NP', 'in', 'my']                                        ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'NP', 'in', 'my']                                        ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'V', 'NP', 'in', 'DET']                                       ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'NP', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'NP', 'in', 'DET', 'N']                                           []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'V', 'NP', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'DET', 'N', 'in']                                  ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'V', 'DET', 'N', 'in']                                  ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'V', 'DET', 'N', 'P']                                   ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'V', 'DET', 'N', 'P', 'my']                                   ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'DET', 'N', 'P', 'my']                                   ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'V', 'DET', 'N', 'P', 'DET']                                  ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'DET', 'N', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'DET', 'N', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'V', 'DET', 'N', 'P', 'NP']                                            []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'V', 'DET', 'N', 'PP']                                                 []
+ >reduce:  ['DET', 'N', 'PP']  -R->  ['NP']
+           ['NP', 'V', 'NP']                                                             []
+ >reduce:  ['V', 'NP']  -R->  ['VP']
+           ['NP', 'VP']                                                                  []
+ >reduce:  ['NP', 'VP']  -R->  ['S']
+ >accept!
+           ['NP', 'V', 'DET', 'N', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'DET', 'N', 'in', 'my']                                  ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'DET', 'N', 'in', 'my']                                  ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'V', 'DET', 'N', 'in', 'DET']                                 ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'DET', 'N', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'DET', 'N', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'V', 'DET', 'N', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'DET', 'elephant', 'in']                           ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'V', 'DET', 'elephant', 'in']                           ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'V', 'DET', 'elephant', 'P']                            ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'V', 'DET', 'elephant', 'P', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'DET', 'elephant', 'P', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'V', 'DET', 'elephant', 'P', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'DET', 'elephant', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'DET', 'elephant', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'V', 'DET', 'elephant', 'P', 'NP']                                      []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'V', 'DET', 'elephant', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'DET', 'elephant', 'in', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'DET', 'elephant', 'in', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'V', 'DET', 'elephant', 'in', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'DET', 'elephant', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'DET', 'elephant', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'V', 'DET', 'elephant', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'an', 'elephant']                            ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'V', 'an', 'elephant']                            ['in', 'my', 'pajamas']
+ >reduce:  ['elephant']  -R->  ['N']
+           ['NP', 'V', 'an', 'N']                                   ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'V', 'an', 'N', 'in']                                   ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'V', 'an', 'N', 'in']                                   ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'V', 'an', 'N', 'P']                                    ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'V', 'an', 'N', 'P', 'my']                                    ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'an', 'N', 'P', 'my']                                    ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'V', 'an', 'N', 'P', 'DET']                                   ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'an', 'N', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'an', 'N', 'P', 'DET', 'N']                                       []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'V', 'an', 'N', 'P', 'NP']                                             []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'V', 'an', 'N', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'an', 'N', 'in', 'my']                                   ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'an', 'N', 'in', 'my']                                   ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'V', 'an', 'N', 'in', 'DET']                                  ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'an', 'N', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'an', 'N', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'V', 'an', 'N', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'an', 'elephant', 'in']                            ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'V', 'an', 'elephant', 'in']                            ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'V', 'an', 'elephant', 'P']                             ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'V', 'an', 'elephant', 'P', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'an', 'elephant', 'P', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'V', 'an', 'elephant', 'P', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'an', 'elephant', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'an', 'elephant', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'V', 'an', 'elephant', 'P', 'NP']                                      []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'V', 'an', 'elephant', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'an', 'elephant', 'in', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'an', 'elephant', 'in', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'V', 'an', 'elephant', 'in', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'V', 'an', 'elephant', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'V', 'an', 'elephant', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'V', 'an', 'elephant', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'an']                         ['elephant', 'in', 'my', 'pajamas']
+ >shift:   elephant
+           ['NP', 'shot', 'an']                         ['elephant', 'in', 'my', 'pajamas']
+ >reduce:  ['an']  -R->  ['DET']
+           ['NP', 'shot', 'DET']                        ['elephant', 'in', 'my', 'pajamas']
+ >shift:   elephant
+           ['NP', 'shot', 'DET', 'elephant']                        ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'shot', 'DET', 'elephant']                        ['in', 'my', 'pajamas']
+ >reduce:  ['elephant']  -R->  ['N']
+           ['NP', 'shot', 'DET', 'N']                               ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'shot', 'DET', 'N']                               ['in', 'my', 'pajamas']
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'shot', 'NP']                                     ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'shot', 'NP', 'in']                                     ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'shot', 'NP', 'in']                                     ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'shot', 'NP', 'P']                                      ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'shot', 'NP', 'P', 'my']                                      ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'NP', 'P', 'my']                                      ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'shot', 'NP', 'P', 'DET']                                     ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'NP', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'NP', 'P', 'DET', 'N']                                         []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'shot', 'NP', 'P', 'NP']                                               []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'shot', 'NP', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'NP', 'in', 'my']                                     ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'NP', 'in', 'my']                                     ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'shot', 'NP', 'in', 'DET']                                    ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'NP', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'NP', 'in', 'DET', 'N']                                        []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'shot', 'NP', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'DET', 'N', 'in']                               ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'shot', 'DET', 'N', 'in']                               ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'shot', 'DET', 'N', 'P']                                ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'shot', 'DET', 'N', 'P', 'my']                                ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'DET', 'N', 'P', 'my']                                ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'shot', 'DET', 'N', 'P', 'DET']                               ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'DET', 'N', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'DET', 'N', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'shot', 'DET', 'N', 'P', 'NP']                                         []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'shot', 'DET', 'N', 'PP']                                              []
+ >reduce:  ['DET', 'N', 'PP']  -R->  ['NP']
+           ['NP', 'shot', 'DET', 'N', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'DET', 'N', 'in', 'my']                               ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'DET', 'N', 'in', 'my']                               ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'shot', 'DET', 'N', 'in', 'DET']                              ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'DET', 'N', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'DET', 'N', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'shot', 'DET', 'N', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'DET', 'elephant', 'in']                        ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'shot', 'DET', 'elephant', 'in']                        ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'shot', 'DET', 'elephant', 'P']                         ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'shot', 'DET', 'elephant', 'P', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'DET', 'elephant', 'P', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'shot', 'DET', 'elephant', 'P', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'DET', 'elephant', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'DET', 'elephant', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'shot', 'DET', 'elephant', 'P', 'NP']                                      []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'shot', 'DET', 'elephant', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'DET', 'elephant', 'in', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'DET', 'elephant', 'in', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'shot', 'DET', 'elephant', 'in', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'DET', 'elephant', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'DET', 'elephant', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'shot', 'DET', 'elephant', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'an', 'elephant']                         ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'shot', 'an', 'elephant']                         ['in', 'my', 'pajamas']
+ >reduce:  ['elephant']  -R->  ['N']
+           ['NP', 'shot', 'an', 'N']                                ['in', 'my', 'pajamas']
+ >shift:   in
+           ['NP', 'shot', 'an', 'N', 'in']                                ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'shot', 'an', 'N', 'in']                                ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'shot', 'an', 'N', 'P']                                 ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'shot', 'an', 'N', 'P', 'my']                                 ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'an', 'N', 'P', 'my']                                 ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'shot', 'an', 'N', 'P', 'DET']                                ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'an', 'N', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'an', 'N', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'shot', 'an', 'N', 'P', 'NP']                                          []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'shot', 'an', 'N', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'an', 'N', 'in', 'my']                                ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'an', 'N', 'in', 'my']                                ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'shot', 'an', 'N', 'in', 'DET']                               ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'an', 'N', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'an', 'N', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'shot', 'an', 'N', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'an', 'elephant', 'in']                         ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'shot', 'an', 'elephant', 'in']                         ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['NP', 'shot', 'an', 'elephant', 'P']                          ['my', 'pajamas']
+ >shift:   my
+           ['NP', 'shot', 'an', 'elephant', 'P', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'an', 'elephant', 'P', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'shot', 'an', 'elephant', 'P', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'an', 'elephant', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'an', 'elephant', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'shot', 'an', 'elephant', 'P', 'NP']                                      []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['NP', 'shot', 'an', 'elephant', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'an', 'elephant', 'in', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'an', 'elephant', 'in', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['NP', 'shot', 'an', 'elephant', 'in', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['NP', 'shot', 'an', 'elephant', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['NP', 'shot', 'an', 'elephant', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['NP', 'shot', 'an', 'elephant', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot']                           ['an', 'elephant', 'in', 'my', 'pajamas']
+ >shift:   an
+           ['I', 'shot']                           ['an', 'elephant', 'in', 'my', 'pajamas']
+ >reduce:  ['shot']  -R->  ['V']
+           ['I', 'V']                              ['an', 'elephant', 'in', 'my', 'pajamas']
+ >shift:   an
+           ['I', 'V']                              ['an', 'elephant', 'in', 'my', 'pajamas']
+ >reduce:  ['V']  -R->  ['VP']
+           ['I', 'VP']                             ['an', 'elephant', 'in', 'my', 'pajamas']
+ >shift:   an
+           ['I', 'VP', 'an']                            ['elephant', 'in', 'my', 'pajamas']
+ >shift:   elephant
+           ['I', 'VP', 'an']                            ['elephant', 'in', 'my', 'pajamas']
+ >reduce:  ['an']  -R->  ['DET']
+           ['I', 'VP', 'DET']                           ['elephant', 'in', 'my', 'pajamas']
+ >shift:   elephant
+           ['I', 'VP', 'DET', 'elephant']                           ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'VP', 'DET', 'elephant']                           ['in', 'my', 'pajamas']
+ >reduce:  ['elephant']  -R->  ['N']
+           ['I', 'VP', 'DET', 'N']                                  ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'VP', 'DET', 'N']                                  ['in', 'my', 'pajamas']
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'NP']                                        ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'VP', 'NP', 'in']                                        ['my', 'pajamas']
+ >shift:   my
+           ['I', 'VP', 'NP', 'in']                                        ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'VP', 'NP', 'P']                                         ['my', 'pajamas']
+ >shift:   my
+           ['I', 'VP', 'NP', 'P', 'my']                                         ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'NP', 'P', 'my']                                         ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'VP', 'NP', 'P', 'DET']                                        ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'NP', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'NP', 'P', 'DET', 'N']                                            []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'NP', 'P', 'NP']                                                  []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'VP', 'NP', 'P', 'my', 'pajamas']                                       []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'NP', 'in', 'my']                                        ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'NP', 'in', 'my']                                        ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'VP', 'NP', 'in', 'DET']                                       ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'NP', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'NP', 'in', 'DET', 'N']                                           []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'NP', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'DET', 'N', 'in']                                  ['my', 'pajamas']
+ >shift:   my
+           ['I', 'VP', 'DET', 'N', 'in']                                  ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'VP', 'DET', 'N', 'P']                                   ['my', 'pajamas']
+ >shift:   my
+           ['I', 'VP', 'DET', 'N', 'P', 'my']                                   ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'DET', 'N', 'P', 'my']                                   ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'VP', 'DET', 'N', 'P', 'DET']                                  ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'DET', 'N', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'DET', 'N', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'DET', 'N', 'P', 'NP']                                            []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'VP', 'DET', 'N', 'PP']                                                 []
+ >reduce:  ['DET', 'N', 'PP']  -R->  ['NP']
+           ['I', 'VP', 'DET', 'N', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'DET', 'N', 'in', 'my']                                  ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'DET', 'N', 'in', 'my']                                  ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'VP', 'DET', 'N', 'in', 'DET']                                 ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'DET', 'N', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'DET', 'N', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'DET', 'N', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'DET', 'elephant', 'in']                           ['my', 'pajamas']
+ >shift:   my
+           ['I', 'VP', 'DET', 'elephant', 'in']                           ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'VP', 'DET', 'elephant', 'P']                            ['my', 'pajamas']
+ >shift:   my
+           ['I', 'VP', 'DET', 'elephant', 'P', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'DET', 'elephant', 'P', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'VP', 'DET', 'elephant', 'P', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'DET', 'elephant', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'DET', 'elephant', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'DET', 'elephant', 'P', 'NP']                                      []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'VP', 'DET', 'elephant', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'DET', 'elephant', 'in', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'DET', 'elephant', 'in', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'VP', 'DET', 'elephant', 'in', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'DET', 'elephant', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'DET', 'elephant', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'DET', 'elephant', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'an', 'elephant']                            ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'VP', 'an', 'elephant']                            ['in', 'my', 'pajamas']
+ >reduce:  ['elephant']  -R->  ['N']
+           ['I', 'VP', 'an', 'N']                                   ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'VP', 'an', 'N', 'in']                                   ['my', 'pajamas']
+ >shift:   my
+           ['I', 'VP', 'an', 'N', 'in']                                   ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'VP', 'an', 'N', 'P']                                    ['my', 'pajamas']
+ >shift:   my
+           ['I', 'VP', 'an', 'N', 'P', 'my']                                    ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'an', 'N', 'P', 'my']                                    ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'VP', 'an', 'N', 'P', 'DET']                                   ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'an', 'N', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'an', 'N', 'P', 'DET', 'N']                                       []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'an', 'N', 'P', 'NP']                                             []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'VP', 'an', 'N', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'an', 'N', 'in', 'my']                                   ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'an', 'N', 'in', 'my']                                   ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'VP', 'an', 'N', 'in', 'DET']                                  ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'an', 'N', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'an', 'N', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'an', 'N', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'an', 'elephant', 'in']                            ['my', 'pajamas']
+ >shift:   my
+           ['I', 'VP', 'an', 'elephant', 'in']                            ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'VP', 'an', 'elephant', 'P']                             ['my', 'pajamas']
+ >shift:   my
+           ['I', 'VP', 'an', 'elephant', 'P', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'an', 'elephant', 'P', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'VP', 'an', 'elephant', 'P', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'an', 'elephant', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'an', 'elephant', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'an', 'elephant', 'P', 'NP']                                      []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'VP', 'an', 'elephant', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'an', 'elephant', 'in', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'an', 'elephant', 'in', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'VP', 'an', 'elephant', 'in', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'an', 'elephant', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'an', 'elephant', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'an', 'elephant', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'an']                             ['elephant', 'in', 'my', 'pajamas']
+ >shift:   elephant
+           ['I', 'V', 'an']                             ['elephant', 'in', 'my', 'pajamas']
+ >reduce:  ['an']  -R->  ['DET']
+           ['I', 'V', 'DET']                            ['elephant', 'in', 'my', 'pajamas']
+ >shift:   elephant
+           ['I', 'V', 'DET', 'elephant']                            ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'V', 'DET', 'elephant']                            ['in', 'my', 'pajamas']
+ >reduce:  ['elephant']  -R->  ['N']
+           ['I', 'V', 'DET', 'N']                                   ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'V', 'DET', 'N']                                   ['in', 'my', 'pajamas']
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'V', 'NP']                                         ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'V', 'NP']                                         ['in', 'my', 'pajamas']
+ >reduce:  ['V', 'NP']  -R->  ['VP']
+           ['I', 'VP']                                              ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'VP', 'in']                                              ['my', 'pajamas']
+ >shift:   my
+           ['I', 'VP', 'in']                                              ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'VP', 'P']                                               ['my', 'pajamas']
+ >shift:   my
+           ['I', 'VP', 'P', 'my']                                               ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'P', 'my']                                               ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'VP', 'P', 'DET']                                              ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'P', 'DET', 'pajamas']                                            []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'P', 'DET', 'N']                                                  []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'P', 'NP']                                                        []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'VP', 'P', 'my', 'pajamas']                                             []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'in', 'my']                                              ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'in', 'my']                                              ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'VP', 'in', 'DET']                                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'VP', 'in', 'DET', 'pajamas']                                           []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'VP', 'in', 'DET', 'N']                                                 []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'VP', 'in', 'my', 'pajamas']                                            []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'NP', 'in']                                         ['my', 'pajamas']
+ >shift:   my
+           ['I', 'V', 'NP', 'in']                                         ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'V', 'NP', 'P']                                          ['my', 'pajamas']
+ >shift:   my
+           ['I', 'V', 'NP', 'P', 'my']                                          ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'NP', 'P', 'my']                                          ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'V', 'NP', 'P', 'DET']                                         ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'NP', 'P', 'DET', 'pajamas']                                       []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'NP', 'P', 'DET', 'N']                                             []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'V', 'NP', 'P', 'NP']                                                   []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'V', 'NP', 'PP']                                                        []
+ >reduce:  ['V', 'NP', 'PP']  -R->  ['VP']
+           ['I', 'V', 'NP', 'P', 'my', 'pajamas']                                        []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'NP', 'in', 'my']                                         ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'NP', 'in', 'my']                                         ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'V', 'NP', 'in', 'DET']                                        ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'NP', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'NP', 'in', 'DET', 'N']                                            []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'V', 'NP', 'in', 'my', 'pajamas']                                       []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'DET', 'N', 'in']                                   ['my', 'pajamas']
+ >shift:   my
+           ['I', 'V', 'DET', 'N', 'in']                                   ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'V', 'DET', 'N', 'P']                                    ['my', 'pajamas']
+ >shift:   my
+           ['I', 'V', 'DET', 'N', 'P', 'my']                                    ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'DET', 'N', 'P', 'my']                                    ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'V', 'DET', 'N', 'P', 'DET']                                   ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'DET', 'N', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'DET', 'N', 'P', 'DET', 'N']                                       []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'V', 'DET', 'N', 'P', 'NP']                                             []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'V', 'DET', 'N', 'PP']                                                  []
+ >reduce:  ['DET', 'N', 'PP']  -R->  ['NP']
+           ['I', 'V', 'NP']                                                              []
+ >reduce:  ['V', 'NP']  -R->  ['VP']
+           ['I', 'V', 'DET', 'N', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'DET', 'N', 'in', 'my']                                   ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'DET', 'N', 'in', 'my']                                   ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'V', 'DET', 'N', 'in', 'DET']                                  ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'DET', 'N', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'DET', 'N', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'V', 'DET', 'N', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'DET', 'elephant', 'in']                            ['my', 'pajamas']
+ >shift:   my
+           ['I', 'V', 'DET', 'elephant', 'in']                            ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'V', 'DET', 'elephant', 'P']                             ['my', 'pajamas']
+ >shift:   my
+           ['I', 'V', 'DET', 'elephant', 'P', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'DET', 'elephant', 'P', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'V', 'DET', 'elephant', 'P', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'DET', 'elephant', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'DET', 'elephant', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'V', 'DET', 'elephant', 'P', 'NP']                                      []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'V', 'DET', 'elephant', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'DET', 'elephant', 'in', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'DET', 'elephant', 'in', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'V', 'DET', 'elephant', 'in', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'DET', 'elephant', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'DET', 'elephant', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'V', 'DET', 'elephant', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'an', 'elephant']                             ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'V', 'an', 'elephant']                             ['in', 'my', 'pajamas']
+ >reduce:  ['elephant']  -R->  ['N']
+           ['I', 'V', 'an', 'N']                                    ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'V', 'an', 'N', 'in']                                    ['my', 'pajamas']
+ >shift:   my
+           ['I', 'V', 'an', 'N', 'in']                                    ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'V', 'an', 'N', 'P']                                     ['my', 'pajamas']
+ >shift:   my
+           ['I', 'V', 'an', 'N', 'P', 'my']                                     ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'an', 'N', 'P', 'my']                                     ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'V', 'an', 'N', 'P', 'DET']                                    ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'an', 'N', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'an', 'N', 'P', 'DET', 'N']                                        []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'V', 'an', 'N', 'P', 'NP']                                              []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'V', 'an', 'N', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'an', 'N', 'in', 'my']                                    ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'an', 'N', 'in', 'my']                                    ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'V', 'an', 'N', 'in', 'DET']                                   ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'an', 'N', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'an', 'N', 'in', 'DET', 'N']                                       []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'V', 'an', 'N', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'an', 'elephant', 'in']                             ['my', 'pajamas']
+ >shift:   my
+           ['I', 'V', 'an', 'elephant', 'in']                             ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'V', 'an', 'elephant', 'P']                              ['my', 'pajamas']
+ >shift:   my
+           ['I', 'V', 'an', 'elephant', 'P', 'my']                              ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'an', 'elephant', 'P', 'my']                              ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'V', 'an', 'elephant', 'P', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'an', 'elephant', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'an', 'elephant', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'V', 'an', 'elephant', 'P', 'NP']                                       []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'V', 'an', 'elephant', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'an', 'elephant', 'in', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'an', 'elephant', 'in', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'V', 'an', 'elephant', 'in', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'V', 'an', 'elephant', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'V', 'an', 'elephant', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'V', 'an', 'elephant', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'an']                          ['elephant', 'in', 'my', 'pajamas']
+ >shift:   elephant
+           ['I', 'shot', 'an']                          ['elephant', 'in', 'my', 'pajamas']
+ >reduce:  ['an']  -R->  ['DET']
+           ['I', 'shot', 'DET']                         ['elephant', 'in', 'my', 'pajamas']
+ >shift:   elephant
+           ['I', 'shot', 'DET', 'elephant']                         ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'shot', 'DET', 'elephant']                         ['in', 'my', 'pajamas']
+ >reduce:  ['elephant']  -R->  ['N']
+           ['I', 'shot', 'DET', 'N']                                ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'shot', 'DET', 'N']                                ['in', 'my', 'pajamas']
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'shot', 'NP']                                      ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'shot', 'NP', 'in']                                      ['my', 'pajamas']
+ >shift:   my
+           ['I', 'shot', 'NP', 'in']                                      ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'shot', 'NP', 'P']                                       ['my', 'pajamas']
+ >shift:   my
+           ['I', 'shot', 'NP', 'P', 'my']                                       ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'NP', 'P', 'my']                                       ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'shot', 'NP', 'P', 'DET']                                      ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'NP', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'NP', 'P', 'DET', 'N']                                          []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'shot', 'NP', 'P', 'NP']                                                []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'shot', 'NP', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'NP', 'in', 'my']                                      ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'NP', 'in', 'my']                                      ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'shot', 'NP', 'in', 'DET']                                     ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'NP', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'NP', 'in', 'DET', 'N']                                         []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'shot', 'NP', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'DET', 'N', 'in']                                ['my', 'pajamas']
+ >shift:   my
+           ['I', 'shot', 'DET', 'N', 'in']                                ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'shot', 'DET', 'N', 'P']                                 ['my', 'pajamas']
+ >shift:   my
+           ['I', 'shot', 'DET', 'N', 'P', 'my']                                 ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'DET', 'N', 'P', 'my']                                 ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'shot', 'DET', 'N', 'P', 'DET']                                ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'DET', 'N', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'DET', 'N', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'shot', 'DET', 'N', 'P', 'NP']                                          []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'shot', 'DET', 'N', 'PP']                                               []
+ >reduce:  ['DET', 'N', 'PP']  -R->  ['NP']
+           ['I', 'shot', 'DET', 'N', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'DET', 'N', 'in', 'my']                                ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'DET', 'N', 'in', 'my']                                ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'shot', 'DET', 'N', 'in', 'DET']                               ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'DET', 'N', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'DET', 'N', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'shot', 'DET', 'N', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'DET', 'elephant', 'in']                         ['my', 'pajamas']
+ >shift:   my
+           ['I', 'shot', 'DET', 'elephant', 'in']                         ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'shot', 'DET', 'elephant', 'P']                          ['my', 'pajamas']
+ >shift:   my
+           ['I', 'shot', 'DET', 'elephant', 'P', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'DET', 'elephant', 'P', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'shot', 'DET', 'elephant', 'P', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'DET', 'elephant', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'DET', 'elephant', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'shot', 'DET', 'elephant', 'P', 'NP']                                      []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'shot', 'DET', 'elephant', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'DET', 'elephant', 'in', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'DET', 'elephant', 'in', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'shot', 'DET', 'elephant', 'in', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'DET', 'elephant', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'DET', 'elephant', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'shot', 'DET', 'elephant', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'an', 'elephant']                          ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'shot', 'an', 'elephant']                          ['in', 'my', 'pajamas']
+ >reduce:  ['elephant']  -R->  ['N']
+           ['I', 'shot', 'an', 'N']                                 ['in', 'my', 'pajamas']
+ >shift:   in
+           ['I', 'shot', 'an', 'N', 'in']                                 ['my', 'pajamas']
+ >shift:   my
+           ['I', 'shot', 'an', 'N', 'in']                                 ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'shot', 'an', 'N', 'P']                                  ['my', 'pajamas']
+ >shift:   my
+           ['I', 'shot', 'an', 'N', 'P', 'my']                                  ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'an', 'N', 'P', 'my']                                  ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'shot', 'an', 'N', 'P', 'DET']                                 ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'an', 'N', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'an', 'N', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'shot', 'an', 'N', 'P', 'NP']                                           []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'shot', 'an', 'N', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'an', 'N', 'in', 'my']                                 ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'an', 'N', 'in', 'my']                                 ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'shot', 'an', 'N', 'in', 'DET']                                ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'an', 'N', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'an', 'N', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'shot', 'an', 'N', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'an', 'elephant', 'in']                          ['my', 'pajamas']
+ >shift:   my
+           ['I', 'shot', 'an', 'elephant', 'in']                          ['my', 'pajamas']
+ >reduce:  ['in']  -R->  ['P']
+           ['I', 'shot', 'an', 'elephant', 'P']                           ['my', 'pajamas']
+ >shift:   my
+           ['I', 'shot', 'an', 'elephant', 'P', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'an', 'elephant', 'P', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'shot', 'an', 'elephant', 'P', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'an', 'elephant', 'P', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'an', 'elephant', 'P', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'shot', 'an', 'elephant', 'P', 'NP']                                      []
+ >reduce:  ['P', 'NP']  -R->  ['PP']
+           ['I', 'shot', 'an', 'elephant', 'P', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'an', 'elephant', 'in', 'my']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'an', 'elephant', 'in', 'my']                             ['pajamas']
+ >reduce:  ['my']  -R->  ['DET']
+           ['I', 'shot', 'an', 'elephant', 'in', 'DET']                             ['pajamas']
+ >shift:   pajamas
+           ['I', 'shot', 'an', 'elephant', 'in', 'DET', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+           ['I', 'shot', 'an', 'elephant', 'in', 'DET', 'N']                                      []
+ >reduce:  ['DET', 'N']  -R->  ['NP']
+           ['I', 'shot', 'an', 'elephant', 'in', 'my', 'pajamas']                                      []
+ >reduce:  ['pajamas']  -R->  ['N']
+2  solutions
+solution  1
+[(0, 'I'), (1, ['NP']), (0, 'shot'), (1, ['V']), (0, 'an'), (1, ['DET']), (0, 'elephant'), (1, ['N']), (2, ['NP']), (0, 'in'), (1, ['P']), (0, 'my'), (1, ['DET']), (0, 'pajamas'), (1, ['N']), (2, ['NP']), (2, ['PP']), (3, ['VP']), (2, ['S'])]
+solution  2
+[(0, 'I'), (1, ['NP']), (0, 'shot'), (1, ['V']), (0, 'an'), (1, ['DET']), (0, 'elephant'), (1, ['N']), (0, 'in'), (1, ['P']), (0, 'my'), (1, ['DET']), (0, 'pajamas'), (1, ['N']), (2, ['NP']), (2, ['PP']), (3, ['NP']), (2, ['VP']), (2, ['S'])]
+total solutions : 2
